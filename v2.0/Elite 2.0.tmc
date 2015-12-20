@@ -1,0 +1,42 @@
+include "target.tmh"
+int main()
+{
+	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&T16000, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);
+	Configure(&RMFD, MODE_EXCLUDED);
+	if(Init(&EventHandle)) return 1;
+	SetKBRate(32, 50);
+	SetKBLayout(KB_ENG);
+	SetShiftButton(0, 0, &Throttle, BSF, BSB, 0);
+	MapKeyIOUMD(&Joystick, H3U, DX11, DX11, DX11, DX11, PULSE+KP8, PULSE+KP8);
+	MapKeyIOUMD(&Joystick, H3R, DX12, DX12, DX12, DX12, PULSE+KP6, PULSE+KP6);
+	MapKeyIOUMD(&Joystick, H1D, DX13, DX13, DX13, DX13, PULSE+KP2, PULSE+KP2);
+	MapKeyIOUMD(&Joystick, H1L, DX14, DX14, DX14, DX14, PULSE+KP4, PULSE+KP4);
+	MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
+	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
+	MapKeyIOUMD(&Throttle, CHF, PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y');
+	MapKeyIOUMD(&Throttle, CHB, PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h');
+	MapKeyIOUMD(&Throttle, EORMOTOR, HOME, HOME, HOME, HOME, HOME, HOME);
+	MapKeyIOUMD(&Throttle, LDGH, PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l');
+	MapKeyIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
+	MapKeyRIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
+	MapKeyIOUMD(&Throttle, EORIGN, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END);
+	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
+	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, SCY, 0, 0, 0, 0, 0);
+	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
+	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+
+}
+int EventHandle(int type, alias o, int x)
+{
+	DefaultMapping(&o, x);
+}
