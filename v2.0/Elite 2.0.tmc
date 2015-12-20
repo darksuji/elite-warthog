@@ -1,4 +1,8 @@
 include "target.tmh"
+
+// Globals
+char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
+
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
@@ -35,7 +39,30 @@ int main()
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
 
+	// FSD mode management
+	FSD_mode = 2;	// default to supercruise
+			// FIXME:  figure out how to poll the device to do this right
+
+	// Autopilot PATH => FSD wingman nav lock
+	MapKey( &Throttle, APPAT, EXEC("FSD_mode = 3;") );
+	// Autopilot ALT/HDG => FSD supercruise
+	MapKey( &Throttle, APAH, EXEC("FSD_mode = 2;") );
+	// Autopilot ALT => FSD hyperspace
+	MapKey( &Throttle, APALT, EXEC("FSD_mode = 1;") );
+
+	// What to do on autopilot engage
+	MapKey( &Throttle, APENG, EXEC(
+		"if (FSD_mode == 1) {					"
+		"	ActKey( CHAIN(PULSE+R_SHIFT, PULSE+'k') );	"
+		"} else if (FSD_mode == 2) {				"
+		"	ActKey( PULSE+'k' );				"
+		"} else if (FSD_mode == 3) {				"
+		"	// FIXME: respect wingman selec			"
+		"	ActKey( CHAIN(PULSE+'7', D(), PULSE+'-') );	"
+		"}							"
+	) );
 }
+
 int EventHandle(int type, alias o, int x)
 {
 	DefaultMapping(&o, x);
