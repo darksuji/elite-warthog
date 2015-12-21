@@ -1,6 +1,9 @@
 include "target.tmh"
 
 // Globals
+int wingman_selection_keys;
+char selected_wingman;
+
 char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
 
 int main()
@@ -38,6 +41,23 @@ int main()
 	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+
+	// Wingman management
+	wingman_selection_keys = LIST(0, '7', '8', '9'); // 0 is dummy
+	selected_wingman = 1;
+	
+	MapKey( &Throttle, PSB, EXEC("selected_wingman = 1;") );
+	MapKey( &Throttle, PSM, EXEC("selected_wingman = 2;") );
+	MapKey( &Throttle, PSF, EXEC("selected_wingman = 3;") );
+
+	// Target wingman's target
+	MapKey( &Joystick, H2D, EXEC(
+		"ActKey( CHAIN("
+		"	KEYON+PULSE+X(wingman_selection_keys, selected_wingman),"
+		"	D(),"
+		"	KEYON+PULSE+'0'"
+		") );"
+	) );
 
 	// FSD mode management
 	FSD_mode = 2;	// default to supercruise
