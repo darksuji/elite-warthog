@@ -1,6 +1,10 @@
 include "target.tmh"
 
 // Globals
+int wingman_selection_keys;
+char selected_wingman;
+
+int FSD_commands;
 char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
 
 int main()
@@ -39,7 +43,30 @@ int main()
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
 
+	// Wingman management
+	wingman_selection_keys = LIST(0, '7', '8', '9'); // 0 is dummy
+	selected_wingman = 1;
+	
+	MapKey( &Throttle, PSB, EXEC("selected_wingman = 1;") );
+	MapKey( &Throttle, PSM, EXEC("selected_wingman = 2;") );
+	MapKey( &Throttle, PSF, EXEC("selected_wingman = 3;") );
+
+	// Target wingman's target
+	MapKey( &Joystick, H2D, EXEC(
+		"ActKey( CHAIN("
+		"	target_selected_wingman_code(),"
+		"	D(),"
+		"	KEYON+PULSE+'0'"
+		") );"
+	) );
+
 	// FSD mode management
+	FSD_commands = LIST(
+		0, // dummy
+		CHAIN(KEYON+PULSE+R_SHIFT, KEYON+PULSE+'k'),
+		KEYON+PULSE+'k',
+		0 // must be computed at runtime
+	);
 	FSD_mode = 2;	// default to supercruise
 			// FIXME:  figure out how to poll the device to do this right
 
@@ -52,14 +79,16 @@ int main()
 
 	// What to do on autopilot engage
 	MapKey( &Throttle, APENG, EXEC(
-		"if (FSD_mode == 1) {"
-		"	ActKey( CHAIN(KEYON+PULSE+R_SHIFT, KEYON+PULSE+'k') );"
-		"} else if (FSD_mode == 2) {"
-		"	ActKey( KEYON+PULSE+'k' );"
-		"} else if (FSD_mode == 3) {"
-		"	ActKey( CHAIN(KEYON+PULSE+'7', D(), KEYON+PULSE+'-') );"
+		"if (FSD_mode == 3) {"
+		"	ActKey( CHAIN(target_selected_wingman_code(), D(), KEYON+PULSE+'-') );"
+		"} else {"
+		"	ActKey( X(FSD_commands, FSD_mode) );"
 		"}"
 	) );
+}
+
+int target_selected_wingman_code() {
+	return KEYON+PULSE+X(wingman_selection_keys, selected_wingman);
 }
 
 int EventHandle(int type, alias o, int x)
