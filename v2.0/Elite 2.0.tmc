@@ -4,6 +4,7 @@ include "target.tmh"
 int wingman_selection_keys;
 char selected_wingman;
 
+int FSD_commands;
 char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
 
 int main()
@@ -60,6 +61,12 @@ int main()
 	) );
 
 	// FSD mode management
+	FSD_commands = LIST(
+		0, // dummy
+		CHAIN(KEYON+PULSE+R_SHIFT, KEYON+PULSE+'k'),
+		KEYON+PULSE+'k',
+		CHAIN(KEYON+PULSE+'7', D(), KEYON+PULSE+'-') 
+	);
 	FSD_mode = 2;	// default to supercruise
 			// FIXME:  figure out how to poll the device to do this right
 
@@ -71,15 +78,7 @@ int main()
 	MapKey( &Throttle, APALT, EXEC("FSD_mode = 1;") );
 
 	// What to do on autopilot engage
-	MapKey( &Throttle, APENG, EXEC(
-		"if (FSD_mode == 1) {"
-		"	ActKey( CHAIN(KEYON+PULSE+R_SHIFT, KEYON+PULSE+'k') );"
-		"} else if (FSD_mode == 2) {"
-		"	ActKey( KEYON+PULSE+'k' );"
-		"} else if (FSD_mode == 3) {"
-		"	ActKey( CHAIN(KEYON+PULSE+'7', D(), KEYON+PULSE+'-') );"
-		"}"
-	) );
+	MapKey( &Throttle, APENG, EXEC("ActKey( X(FSD_commands, FSD_mode) );") );
 }
 
 int EventHandle(int type, alias o, int x)
