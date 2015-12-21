@@ -52,13 +52,14 @@ int main()
 
 	// What to do on autopilot engage
 	MapKey( &Throttle, APENG, EXEC(
-		"if (FSD_mode == 1) {"
-		"	ActKey( CHAIN(KEYON+PULSE+R_SHIFT, KEYON+PULSE+'k') );"
-		"} else if (FSD_mode == 2) {"
-		"	ActKey( KEYON+PULSE+'k' );"
-		"} else if (FSD_mode == 3) {"
-		"	ActKey( CHAIN(KEYON+PULSE+'7', D(), KEYON+PULSE+'-') );"
-		"}"
+		"if (FSD_mode == 1) {					"
+		"	ActKey( CHAIN(PULSE+R_SHIFT, PULSE+'k') );	"
+		"} else if (FSD_mode == 2) {				"
+		"	ActKey( PULSE+'k' );				"
+		"} else if (FSD_mode == 3) {				"
+		"	// FIXME: respect wingman selec			"
+		"	ActKey( CHAIN(PULSE+'7', D(), PULSE+'-') );	"
+		"}							"
 	) );
 }
 
@@ -66,5 +67,3 @@ int EventHandle(int type, alias o, int x)
 {
 	DefaultMapping(&o, x);
 }
-
-
