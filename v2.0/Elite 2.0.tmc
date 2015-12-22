@@ -7,31 +7,25 @@ char selected_wingman;
 int FSD_commands;
 char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
 
-int main()
-{
+int main() {
+	// Which physical devices we have
 	Configure(&HCougar, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&LMFD, MODE_EXCLUDED);
 	Configure(&RMFD, MODE_EXCLUDED);
-	if(Init(&EventHandle)) return 1;
+
+	// Check for bullshit
+	if (Init(&EventHandle)) return 1;
+
+	// Configure devices
 	SetKBRate(32, 50);
 	SetKBLayout(KB_ENG);
-	SetShiftButton(0, 0, &Throttle, BSF, BSB, 0);
-	MapKeyIOUMD(&Joystick, H3U, DX11, DX11, DX11, DX11, PULSE+KP8, PULSE+KP8);
-	MapKeyIOUMD(&Joystick, H3R, DX12, DX12, DX12, DX12, PULSE+KP6, PULSE+KP6);
-	MapKeyIOUMD(&Joystick, H3D, DX13, DX13, DX13, DX13, PULSE+KP2, PULSE+KP2);
-	MapKeyIOUMD(&Joystick, H3L, DX14, DX14, DX14, DX14, PULSE+KP4, PULSE+KP4);
+
+	// Configure axes
 	MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
 	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
-	MapKeyIOUMD(&Throttle, CHF, PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y');
-	MapKeyIOUMD(&Throttle, CHB, PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h');
-	MapKeyIOUMD(&Throttle, EORMOTOR, HOME, HOME, HOME, HOME, HOME, HOME);
-	MapKeyIOUMD(&Throttle, LDGH, PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l');
-	MapKeyIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
-	MapKeyRIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
-	MapKeyIOUMD(&Throttle, EORIGN, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END);
 	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
@@ -42,6 +36,25 @@ int main()
 	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+
+	// Configure buttons
+	SetShiftButton(0, 0, &Throttle, BSF, BSB, 0);
+
+	MapKeyIOUMD(&Throttle, CSU, DX22, DX22, DX22, DX22, PULSE+KP8, PULSE+KP8);
+	MapKeyIOUMD(&Throttle, CSD, DX24, DX24, DX24, DX24, PULSE+KP2, PULSE+KP2);
+	MapKeyIOUMD(&Throttle, CSR, DX23, DX23, DX23, DX23, PULSE+KP6, PULSE+KP6);
+	MapKeyIOUMD(&Throttle, CSL, DX25, DX25, DX25, DX25, PULSE+KP4, PULSE+KP4);
+
+	MapKeyIOUMD(&Throttle, CHF, PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y');
+	MapKeyIOUMD(&Throttle, CHB, PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h');
+
+	MapKeyIOUMD(&Throttle, EORMOTOR, HOME, HOME, HOME, HOME, HOME, HOME);
+	MapKeyIOUMD(&Throttle, EORIGN, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END);
+
+	MapKeyIOUMD(&Throttle, LDGH, PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l');
+
+	MapKeyIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
+	MapKeyRIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
 
 	// Wingman management
 	wingman_selection_keys = LIST(0, '7', '8', '9'); // 0 is dummy
@@ -68,7 +81,6 @@ int main()
 		0 // must be computed at runtime
 	);
 	FSD_mode = 2;	// default to supercruise
-			// FIXME:  figure out how to poll the device to do this right
 
 	// Autopilot PATH => FSD wingman nav lock
 	MapKey( &Throttle, APPAT, EXEC("FSD_mode = 3;") );
@@ -91,8 +103,7 @@ int target_selected_wingman_code() {
 	return KEYON+PULSE+X(wingman_selection_keys, selected_wingman);
 }
 
-int EventHandle(int type, alias o, int x)
-{
+int EventHandle(int type, alias o, int x) {
 	DefaultMapping(&o, x);
 }
 
