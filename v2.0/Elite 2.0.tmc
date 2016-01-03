@@ -26,10 +26,10 @@ int main() {
 	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
 	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
-	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
-	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Throttle, SCY, 0, 0, 0, 0, 0);
+	MapAxis(&Throttle, SCX, MOUSE_X_AXIS, AXIS_NORMAL, MAP_RELATIVE);
+	SetSCurve(&Throttle, SCX, 0, 0, 0, 20, -5);
+	MapAxis(&Throttle, SCY, MOUSE_Y_AXIS, AXIS_NORMAL, MAP_RELATIVE);
+	SetSCurve(&Throttle, SCY, 0, 0, 0, 20, -5);
 	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
