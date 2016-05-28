@@ -295,7 +295,9 @@
 		<ToggleOn Value="1" />
 	</DisableRotationCorrectToggle>
 	<OrbitLinesToggle>
-		<Primary Device="{NoDevice}" Key="" />
+		<Primary Device="Keyboard" Key="Key_Apostrophe">
+			<Modifier Device="Keyboard" Key="Key_LeftShift" />
+		</Primary>
 		<Secondary Device="{NoDevice}" Key="" />
 	</OrbitLinesToggle>
 	<SelectTarget>
@@ -335,7 +337,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</TargetWingman2>
 	<SelectTargetsTarget>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_9" />
+		<Primary Device="Keyboard" Key="Key_0" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</SelectTargetsTarget>
 	<WingNavLock>
@@ -352,7 +354,7 @@
 	</CyclePreviousSubsystem>
 	<GunsightSystem />
 	<TargetNextRouteSystem>
-		<Primary Device="{NoDevice}" Key="" />
+		<Primary Device="Keyboard" Key="Key_Hash" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</TargetNextRouteSystem>
 	<PrimaryFire>
@@ -361,7 +363,7 @@
 	</PrimaryFire>
 	<SecondaryFire>
 		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_6" />
-		<Secondary Device="{NoDevice}" Key="" />
+		<Secondary Device="ThrustMasterWarthogCombined" Key="Joy_3" />
 	</SecondaryFire>
 	<CycleFireGroupNext>
 		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_5" />
@@ -378,11 +380,11 @@
 	<DeployHardpointsOnFire Value="0" />
 	<ToggleButtonUpInput>
 		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_31" />
-		<Secondary Device="{NoDevice}" Key="" />
+		<Secondary Device="Keyboard" Key="Key_PageDown" />
 		<ToggleOn Value="0" />
 	</ToggleButtonUpInput>
 	<DeployHeatSink>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_32" />
+		<Primary Device="Keyboard" Key="Key_X" />
 		<Secondary Device="ThrustMasterWarthogCombined" Key="Joy_27" />
 	</DeployHeatSink>
 	<ShipSpotLightToggle>
@@ -392,7 +394,7 @@
 	<RadarRangeAxis>
 		<Binding Device="ThrustMasterWarthogCombined" Key="Joy_VAxis" />
 		<Inverted Value="0" />
-		<Deadzone Value="0.12965342" />
+		<Deadzone Value="0.00000000" />
 	</RadarRangeAxis>
 	<RadarIncreaseRange>
 		<Primary Device="{NoDevice}" Key="" />
@@ -425,7 +427,7 @@
 	<ToggleCargoScoop>
 		<Primary Device="Keyboard" Key="Key_Home" />
 		<Secondary Device="{NoDevice}" Key="" />
-		<ToggleOn Value="0" />
+		<ToggleOn Value="1" />
 	</ToggleCargoScoop>
 	<EjectAllCargo>
 		<Primary Device="Keyboard" Key="Key_End" />
@@ -442,11 +444,11 @@
 	<MuteButtonMode Value="mute_toggle" />
 	<CqcMuteButtonMode Value="mute_pushToTalk" />
 	<UseShieldCell>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_28" />
+		<Primary Device="Keyboard" Key="Key_Z" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</UseShieldCell>
 	<FireChaffLauncher>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_30" />
+		<Primary Device="Keyboard" Key="Key_C" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</FireChaffLauncher>
 	<PhotoCameraToggle>
@@ -454,7 +456,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</PhotoCameraToggle>
 	<UIFocus>
-		<Primary Device="{NoDevice}" Key="" />
+		<Primary Device="Keyboard" Key="Key_LeftShift" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</UIFocus>
 	<UIFocusMode Value="Bindings_FocusModeHold" />
@@ -529,7 +531,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</UI_Select>
 	<UI_Back>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_9" />
+		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_7" />
 		<Secondary Device="{NoDevice}" Key="" />
 	</UI_Back>
 	<CycleNextPanel>
@@ -713,7 +715,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</BuggyPitchDownButton>
 	<VerticalThrustersButton>
-		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_21" />
+		<Primary Device="ThrustMasterWarthogCombined" Key="Joy_22" />
 		<Secondary Device="{NoDevice}" Key="" />
 		<ToggleOn Value="0" />
 	</VerticalThrustersButton>
@@ -774,7 +776,7 @@
 	</BuggyTurretPitchDownButton>
 	<DriveSpeedAxis>
 		<Binding Device="ThrustMasterWarthogCombined" Key="Joy_ZAxis" />
-		<Inverted Value="0" />
+		<Inverted Value="1" />
 		<Deadzone Value="0.00000000" />
 	</DriveSpeedAxis>
 	<BuggyThrottleRange Value="Bindings_BuggyThrottleForewardOnly" />
