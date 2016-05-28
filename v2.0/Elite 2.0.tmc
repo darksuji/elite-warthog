@@ -7,6 +7,9 @@ char selected_wingman;
 int FSD_commands;
 char FSD_mode;	// 1 => hyperspace, 2 => supercruise, 3 => wing nav lock
 
+int countermeasure_commands;
+char selected_countermeasure;
+
 int main() {
 	// Which physical devices we have
 	Configure(&HCougar, MODE_EXCLUDED);
@@ -26,16 +29,20 @@ int main() {
 	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
 	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
-	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
-	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Throttle, SCY, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+	
+	// Configure nipple
+	MapAxis(&Throttle, SCX, MOUSE_X_AXIS, AXIS_NORMAL, MAP_RELATIVE);
+	SetSCurve(&Throttle, SCX, 0, 0, 0, 20, -5);
+	MapAxis(&Throttle, SCY, MOUSE_Y_AXIS, AXIS_NORMAL, MAP_RELATIVE);
+	SetSCurve(&Throttle, SCY, 0, 0, 0, 20, -5);
+	
+	MapKey(&Throttle, SC, MOUSE_LEFT);
 
 	// Configure buttons
 	SetShiftButton(0, 0, &Throttle, BSF, BSB, 0);
@@ -48,13 +55,41 @@ int main() {
 	MapKeyIOUMD(&Throttle, CHF, PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y', PULSE+'y');
 	MapKeyIOUMD(&Throttle, CHB, PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h', PULSE+'h');
 
-	MapKeyIOUMD(&Throttle, EORMOTOR, HOME, HOME, HOME, HOME, HOME, HOME);
+	MapKey(&Throttle, EORMOTOR, PULSE+HOME);
+	MapKey(&Throttle, EORNORM, PULSE+HOME);
 	MapKeyIOUMD(&Throttle, EORIGN, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END, PULSE+END);
 
 	MapKeyIOUMD(&Throttle, LDGH, PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l', PULSE+'l');
 
 	MapKeyIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
 	MapKeyRIOUMD(&Throttle, EACON, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS, PULSE+INS);
+	
+	MapKey(&Throttle, RDRNRM, PULSE+L_SHIFT+'\'');
+	MapKey(&Throttle, RDRDIS, PULSE+L_SHIFT+'\'');
+	
+	// Configure switches
+	MapKey(&Throttle, APUON, PULSE+L_CTL+L_ALT+'g'); //Enable/disable UI
+	MapKey(&Throttle, APUOFF, PULSE+L_CTL+L_ALT+'g'); //Enable/disable UI
+	MapKey(&Throttle, EFROVER, DX1); //Primary hardpoint enable switch
+	MapKey(&Throttle, EFLOVER, DX6); //Secondary hardpoint enable switch
+	
+	//Left engine switch doesn't have an obvious use, but
+	MapKey(&Throttle, EOLIGN, DX22);	//Lateral thrusters up, because when landed on planets
+										//that's as close to engines on as we can get
+	MapKey(&Throttle, EOLMOTOR, DX4); 	//Flight assist off because that's as close
+										//to engines off as we can get
+	
+	// Countermeasure management
+	countermeasure_commands = LIST(0, 'z', 'x', 'c'); //Chaff, heatsink, shield cell
+	selected_countermeasure = 2; //Switch rests naturally in the middle position
+	
+	MapKey(&Throttle, BSF, EXEC("selected_countermeasure = 1;"));
+	MapKey(&Throttle, BSM, EXEC("selected_countermeasure = 2;"));
+	MapKey(&Throttle, BSB, EXEC("selected_countermeasure = 3;"));
+	
+	MapKey(&Throttle, SPDB, EXEC(
+		"ActKey(fire_countermeasure_code());"
+	));
 
 	// Wingman management
 	wingman_selection_keys = LIST(0, '7', '8', '9'); // 0 is dummy
@@ -97,6 +132,10 @@ int main() {
 		"	ActKey( X(FSD_commands, FSD_mode) );"
 		"}"
 	) );
+}
+
+int fire_countermeasure_code() {
+	return KEYON+PULSE+X(countermeasure_commands, selected_countermeasure);
 }
 
 int target_selected_wingman_code() {
